@@ -6,7 +6,7 @@ import blackjack.domain.player.Player;
 import blackjack.domain.player.User;
 import blackjack.domain.player.Users;
 import blackjack.domain.result.Result;
-import blackjack.money.UserBettingMoney;
+import blackjack.domain.money.UserBettingMoney;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

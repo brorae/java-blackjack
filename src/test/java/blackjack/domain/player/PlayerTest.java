@@ -1,5 +1,6 @@
 package blackjack.domain.player;
 
+import static blackjack.domain.Fixtures.*;
 import static blackjack.domain.Fixtures.ACE_DIAMOND;
 import static blackjack.domain.Fixtures.JACK_DIAMOND;
 import static blackjack.domain.Fixtures.KING_DIAMOND;
@@ -42,7 +43,7 @@ public class PlayerTest {
     @DisplayName("유저의 카드 총합이 21을 초과하면, false를 반환한다.")
     void cannotDrawCardForUser() {
         final User user = new User("pobi", initializeCardsForUser());
-        user.drawCard(Fixtures.TWO_DIAMOND);
+        user.drawCard(TWO_DIAMOND);
         final boolean expected = false;
 
         final boolean actual = user.canDrawCard();
