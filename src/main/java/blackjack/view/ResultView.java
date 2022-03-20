@@ -1,12 +1,11 @@
 package blackjack.view;
 
+import blackjack.domain.GameResult;
+import blackjack.domain.Result;
 import blackjack.domain.player.Dealer;
 import blackjack.domain.player.Player;
 import blackjack.domain.player.User;
 import blackjack.domain.player.Users;
-import blackjack.domain.result.GameResult;
-import blackjack.domain.result.Result;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,6 @@ public class ResultView {
     private static final String DEALER_MARK_MESSAGE = "딜러: ";
     private static final String DEALER_RECEIVE_CARD_MESSAGE = "딜러는 16이하라 한장의 카드를 더 받았습니다.";
     private static final String COLON = ": ";
-    private static final String FINAL_REVENUE_MESSAGE = "##최종 수익";
 
     public static void printPlayersCards(final Dealer dealer, final Users users) {
         printPlayerCards(dealer);
@@ -42,13 +40,13 @@ public class ResultView {
     private static String checkPlayerType(final Player player) {
         if (player instanceof Dealer) {
             return player.getCardsToList().stream()
-                    .map(card -> card.getDenominationType() + card.getSuit())
+                    .map(card -> card.getCardNumberType() + card.getCardPattern())
                     .findFirst()
                     .orElseThrow();
         }
-        return player.getCardsToList().stream()
-                .map(card -> card.getDenominationType() + card.getSuit())
-                .collect(Collectors.joining(", "));
+        return String.join(", ", player.getCardsToList().stream()
+                .map(card -> card.getCardNumberType() + card.getCardPattern())
+                .collect(Collectors.toList()));
     }
 
     public static void printDealerReceiveCard() {
@@ -67,7 +65,7 @@ public class ResultView {
     private static String makeDealerFinalCards(final Dealer dealer) {
         StringBuilder sb = new StringBuilder();
         String dealerCards = String.join(", ", dealer.getCardsToList().stream()
-                .map(card -> card.getDenominationType() + card.getSuit())
+                .map(card -> card.getCardNumberType() + card.getCardPattern())
                 .collect(Collectors.toList()));
         sb.append(dealer.getName())
                 .append(CARD_MARK_MESSAGE)
@@ -90,32 +88,13 @@ public class ResultView {
         System.out.println();
     }
 
-    private static void printUsersGameResult(final Map<User, Result> userResult) {
-        userResult.keySet()
-                .stream()
-                .sorted(Comparator.comparing(User::getName))
-                .forEach(user -> {
-                    final Result result = userResult.get(user);
-                    System.out.println(user.getName() + COLON + result.getResult());
-                });
+    private static void printUsersGameResult(final Map<String, Result> userResult) {
+        for (final String userName : userResult.keySet()) {
+            System.out.println(userName + COLON + userResult.get(userName).getResult());
+        }
     }
 
-    public static void printErrorMessage(final Exception e) {
+    public static void printErrorMessage(Exception e) {
         System.out.println(e.getMessage());
-    }
-
-    public static void printDealerRevenue(final int dealerRevenue) {
-        System.out.println();
-        System.out.println(FINAL_REVENUE_MESSAGE);
-        System.out.println(DEALER_MARK_MESSAGE + dealerRevenue);
-    }
-
-    public static void printFinalRevenue(final Map<User, Integer> userMoney) {
-        userMoney.keySet()
-                .stream()
-                .sorted(Comparator.comparing(User::getName))
-                .forEach(user -> {
-                    System.out.println(user.getName() + COLON + userMoney.get(user));
-                });
     }
 }

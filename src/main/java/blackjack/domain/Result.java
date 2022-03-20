@@ -1,4 +1,4 @@
-package blackjack.domain.result;
+package blackjack.domain;
 
 import blackjack.domain.player.Player;
 
@@ -10,18 +10,18 @@ public enum Result {
 
     private final String result;
 
-    Result(final String result) {
+    Result(String result) {
         this.result = result;
     }
 
     public static Result findResult(final Player player, final Player otherPlayer) {
-        if ((player.isBust() && otherPlayer.isBust()) || (player.isBlackJack() && otherPlayer.isBlackJack())) {
+        if (player.isBust() && otherPlayer.isBust()) {
             return DRAW;
         }
-        if (player.isBust() || otherPlayer.isBlackJack()) {
+        if (player.isBust()) {
             return LOSE;
         }
-        if (otherPlayer.isBust() || player.isBlackJack()) {
+        if (otherPlayer.isBust()) {
             return WIN;
         }
         return compareScore(player.getTotalScore(), otherPlayer.getTotalScore());

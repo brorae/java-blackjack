@@ -1,8 +1,8 @@
 package blackjack.domain.player;
 
+import blackjack.domain.Result;
 import blackjack.domain.card.Card;
 import blackjack.domain.card.Cards;
-import blackjack.domain.result.Result;
 import java.util.List;
 
 public abstract class Player {
@@ -15,11 +15,11 @@ public abstract class Player {
     public Player(final String name, final List<Card> cards) {
         this.name = name;
         this.cards = new Cards(cards);
-        validateInitialCardsSize(this.cards);
+        validateReceivedCardsSize(this.cards);
     }
 
-    private void validateInitialCardsSize(final Cards cards) {
-        if (!cards.isInitialCards()) {
+    private void validateReceivedCardsSize(final Cards cards) {
+        if (!cards.isFirstReceivedCards()) {
             throw new IllegalArgumentException(FIRST_RECEIVED_CARD_SIZE_EXCEPTION_MESSAGE);
         }
     }
@@ -51,6 +51,6 @@ public abstract class Player {
     }
 
     public final int getTotalScore() {
-        return cards.calculateScore(cards.sum(), cards.getCountOfAce());
+        return cards.calculateScore(cards.getTotalScore(), cards.getCountOfAce());
     }
 }
